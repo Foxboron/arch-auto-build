@@ -17,6 +17,7 @@ chown -R nobody:nobody *
 # a binary repo. So we sort out the ones available inn
 # our repo before passing it to aurbuild.
 # We need this so we rely on dependant builds
+aurqueue * > queue
 pacman -Sl $REPO | cut -d" " -f2 > ignores
 comm -13 <(sort ignores) <(sort queue) > queue
 
