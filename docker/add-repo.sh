@@ -5,7 +5,6 @@ if [ ! -d "/repos/$1/$1.db.tar" ]; then
 	cat >/etc/pacman.d/$1<<EOL
 [options]
 CacheDir = /var/cache/pacman/pkg
-CacheDir = /repos/$1
 CleanMethod = KeepCurrent
 
 [$1]
