@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REPO=$1
-PKG=$1
+PKG=$2
 
 # Check if there is a repo for this
 add-repo.sh $REPO
