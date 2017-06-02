@@ -26,4 +26,5 @@ WORKDIR /aur
 
 COPY build.sh /usr/bin/build.sh
 COPY install-chroot.sh /usr/bin/install-chroot.sh
+COPY add-repo.sh /usr/bin/add-repo.sh
 CMD ["/bin/bash"]
