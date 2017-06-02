@@ -1,0 +1,7 @@
+#!/bin/bash
+# Build a package with docker
+
+REPO=$1
+PKG=$2
+
+docker run --privileged --rm -v /srv/repo/$REPO:/var/cache/pacman/$REPO -v /srv/buildbot/master/workers/bot1/build-package/build/$PKG:/aur/$PKG -v /sys/fs/cgroup/systemd/docker:/sys/fs/cgroup/systemd/docker arch-build /usr/bin/build.sh
