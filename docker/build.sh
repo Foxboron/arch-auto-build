@@ -26,7 +26,4 @@ echo "$PKG" > queue
 
 # aurutils will do the building and repo management
 sudo -u nobody aurbuild -c -d $REPO -a queue
-
-# Cleanup
-rm -rf /var/lib/aurbuild/x86_64/nobody*
 exit
