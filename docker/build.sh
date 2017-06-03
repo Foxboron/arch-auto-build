@@ -12,17 +12,14 @@ pacman -Sy
 cower -p */PKGBUILD -dd
 chown -R nobody:nobody *
 
-# Ugly hack - lets find all unique packages
-# cower downloads PKBUILDS even if they are are inn
-# a binary repo. So we sort out the ones available inn
-# our repo before passing it to aurbuild.
-# We need this so we rely on dependant builds
-aurqueue * > queue
-pacman -Sl $REPO | cut -d" " -f2 > ignores
-comm -13 <(sort ignores) <(sort queue) > queue
-
-# Insert out built package back into the queue so it get built
-echo "$PKG" > queue
+# Check all packages for something inn our repo.
+# If it is there, we dont care for the AUR package
+check(){
+    if [[ $(pacman -Sl $REPO | grep $1 | cut -d" " -f2) == "" || $PKG == $1 ]]; then
+        echo $1
+    fi
+}
+aurchain * | while read -r pkg _; do check $PKG; done > queue
 
 # aurutils will do the building and repo management
 sudo -u nobody aurbuild -c -d $REPO -a queue
