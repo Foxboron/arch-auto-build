@@ -23,4 +23,10 @@ aurchain * | while read -r pkg _; do check $PKG; done > /tmp/queue
 
 # aurutils will do the building and repo management
 sudo -u nobody aurbuild -c -d $REPO -a /tmp/queue
-exit
+EXIT_CODE=$?
+
+# Clean up repo
+rm /repos/$REPO/*~
+rm /repos/$REPO/*.old
+
+exit $EXIT_CODE
