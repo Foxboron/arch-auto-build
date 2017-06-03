@@ -16,11 +16,11 @@ chown -R nobody:nobody *
 # If it is there, we dont care for the AUR package
 check(){
     if [[ $(pacman -Sl $REPO | grep $1 | cut -d" " -f2) == "" || $PKG == $1 ]]; then
-        echo $1
+        echo $pkg
     fi
 }
-aurchain * | while read -r pkg _; do check $PKG; done > queue
+aurchain * | while read -r pkg _; do check $PKG; done > /tmp/queue
 
 # aurutils will do the building and repo management
-sudo -u nobody aurbuild -c -d $REPO -a queue
+sudo -u nobody aurbuild -c -d $REPO -a /tmp/queue
 exit
