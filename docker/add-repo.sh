@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ ! -e "/repos/$1/$1.db.tar" ]]; then
+if [[ ! -e "/etc/pacman.d/$1" ]]; then
 	echo "Include = /etc/pacman.d/$1" >> /etc/pacman.conf
 	cat >/etc/pacman.d/$1<<EOL
 [options]
