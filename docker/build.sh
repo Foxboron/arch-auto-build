@@ -26,7 +26,7 @@ sudo -u nobody aurbuild -c -d $REPO -a /tmp/queue
 EXIT_CODE=$?
 
 # Clean up repo
-rm /repos/$REPO/*~
-rm /repos/$REPO/*.old
+rm /repos/$REPO/*~ || true
+rm /repos/$REPO/*.old || true
 
 exit $EXIT_CODE
