@@ -4,7 +4,7 @@ if [ -z "$1" ]; then
 	exit
 fi
 docker build --no-cache=true -t arch-build .
-ID=$(docker run --privileged -v /srv/repo/$1:/repos/$1 -v /sys/fs/cgroup/systemd/docker:/sys/fs/cgroup/systemd/docker -d arch-build bash)
+ID=$(docker run --privileged -i -v /srv/repo/$1:/repos/$1 -v /sys/fs/cgroup/systemd/docker:/sys/fs/cgroup/systemd/docker -d arch-build bash)
 echo $ID
 docker exec $ID /usr/bin/install-chroot.sh
 docker exec $ID /usr/bin/add-repo.sh $1
