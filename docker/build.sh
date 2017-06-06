@@ -19,7 +19,7 @@ check(){
         echo $1
     fi
 }
-aurchain * | while read -r CHAINPKG _; do check $CHAINPKG; done
+aurchain * | while read -r CHAINPKG _; do check $CHAINPKG; done > /tmp/queue
 
 # aurutils will do the building and repo management
 sudo -u nobody aurbuild -c -d $REPO -a /tmp/queue
