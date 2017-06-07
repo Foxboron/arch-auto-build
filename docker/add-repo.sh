@@ -11,7 +11,7 @@ CleanMethod = KeepCurrent
 SigLevel = Optional TrustAll
 Server = file:///repos/$1
 EOL
-	mkdir -p /repos/$1/$1
+	mkdir -p /repos/$1
 	repo-add /repos/$1/$1.db.tar
 	chown -R nobody:nobody /repos/$1
 
