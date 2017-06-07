@@ -1,0 +1,5 @@
+
+[foxboron-testing]
+SigLevel = Optional TrustAll
+Server = file:///repos/foxboron-testing
+
