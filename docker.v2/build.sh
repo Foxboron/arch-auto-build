@@ -7,13 +7,11 @@ PKG=$2
 
 readonly base=/build
 
-_repo_base=/repos
-root=/repos/$REPO
+root=/repos
 
 chmod 777 "$base/$PKG"
 
 var_tmp=$(mktemp -d "${TMPDIR:-/var/tmp}/$argv0".XXXXXXXX)
-echo $var_tmp
 machine=$(uname -m)
 readonly machine
 readonly makepkg_conf=${makepkg_conf-/usr/share/devtools/makepkg-$machine.conf}
@@ -33,6 +31,7 @@ cd_safe "$base/$PKG"
 # I dont know why this works. It just does.
 sudo -u nobody sudo PKGDEST="$var_tmp" makechrootpkg -d $root -r /var/lib/build -cu
 
+root=/repos/$REPO
 
 cd_safe "$var_tmp"
 pkg=(./*)
