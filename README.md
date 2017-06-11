@@ -8,22 +8,13 @@ The goal of this project is to build Arch packages. It creates a docker image wi
 Running install: [https://build.velox.pw](https://build.velox.pw)
 
 
-### docker.v2 - arch-build
-This one only uses devtools and creates and managed a chroot on its own. Repos are defined inside `config/repos` and can
-defined at will. They will be created and managed by the container using normal devtools.
-
-
-### docker - arch-aur-build
-This is the horrible one. It uses cower and aurutils to manage a repo. Repos are defined by using `add-repo.sh`
-inside the container. `build.sh` creates it on the fly as well.
-
-Horrible part: it downloads AUR dependencies without consulting with you. Use at own risk.
-
+### docker
+This image creates a build user and utilizes devtools to build packages in a clean chroot. The image works as a wrapper
+for any Arch tools we need to use to build packages.
 
 ### buildbot
 Currently there is a simple .SRCINFO parser and dependency resolver inside buildbot. It probably works, but it havent
-been tested on complicated build chains. It should be enough to build simple AUR packages and dependencies.
-
+been tested on complicated build chains. It should be enough to build simple packages and dependencies.
 
 ## Installation
 Currently there are some hardcoded defaults inside the buildbot master.cfg. The plan is to refactor this out into a config
@@ -32,26 +23,31 @@ one day.
 
 ```
 # Creates docker image arch-build
-$ cd docker.v2
-$ ./build-docker.sh
-
-# Creates docker image arch-aur-build
 $ cd docker
-$ ./build-docker.sh <repository name>
+$ ./build-docker.sh
 ```
 
+If you need to created packages that utilize PGP signatures, a keyring can be made under the docker directory:
+```
+$ mkdir docker/gnupg && cd docker/gnupg
+$ gpg --no-default-keyring --keyring ./pubring.gpg --recv [[KEYID]]
+```
+Rerun the build step for this to take effect
+
+## Building packages
 `bin/build-package` is assumed to be installed into path by buildbot.
 
-Example running without buildbot:
+Example building a package:
 ```
-$ git clone https://github.com/Foxboron/PKGBUILDS build
-$ ./arch-auto-build/bin/build-package python2-humanize
+$ git clone https://github.com/Foxboron/PKGBUILDS
+$ cd PKGBUILDS
+# build-package [[repository]] [[package]]
+$ build-package foxboron python2-humanize
 ```
 
 #### Docker notes
 Docker needs access to cgroup to use systemd-nspawn, `mkarchroot/arch-nspawn` from devtools relies on this. This means docker will
-need to run with the `--privileged` flag and mount with `-v
-/sys/fs/cgroup/systemd/docker:/sys/fs/cgroup/systemd/docker`.
+need to run with the `--privileged` flag and mount with `-v /sys/fs/cgroup/systemd/docker:/sys/fs/cgroup/systemd/docker`.
 There is also an assumption that the repositories on the host is located inn `/srv/repos`.
 
 ## Signing
