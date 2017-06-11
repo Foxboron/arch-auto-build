@@ -10,7 +10,7 @@ RUN mkdir /config
 VOLUME /config
 
 RUN pacman -Sy
-RUN mkdir /build/{build,.gnupg}
+RUN mkdir -p /build/{build,.gnupg}
 RUN chmod 777 -R /build
 VOLUME /build/build
 WORKDIR /build/build
