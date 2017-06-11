@@ -54,8 +54,8 @@ class TriggerWithPackageNames(steps.Trigger, buildstep.ShellMixin):
                 packages[pkgname] = []
             if key == "makedepends":
                 packages[pkgname].append(value)
-            if key == "depends":
-                packages[pkgname].append(value)
+            # if key == "depends":
+            #     packages[pkgname].append(value)
         return packages
 
     def add_package(self, package):
