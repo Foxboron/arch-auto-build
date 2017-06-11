@@ -12,10 +12,6 @@ root=/repos
 chmod 777 "$base/$PKG"
 
 var_tmp=$(mktemp -d "${TMPDIR:-/var/tmp}/$argv0".XXXXXXXX)
-machine=$(uname -m)
-readonly machine
-readonly makepkg_conf=${makepkg_conf-/usr/share/devtools/makepkg-$machine.conf}
-
 
 # libmakepkg/util/util.sh
 _canonicalize_path() {
@@ -24,12 +20,12 @@ _canonicalize_path() {
 
 source /usr/share/makepkg/util.sh
 
-sudo arch-nspawn -M "$makepkg_conf" \
+sudo arch-nspawn -M /etc/makepkg.conf \
     -C /etc/pacman.conf.orig \
 	/var/lib/build/root pacman -Syu --noconfirm
 
 cd_safe "$base/$PKG"
-sudo -u build sudo PKGDEST="$var_tmp" makechrootpkg -d $root -r /var/lib/build -cu
+sudo -u build sudo PKGDEST="$var_tmp" makechrootpkg -d $root -r /var/lib/build -cun
 
 root=/repos/$REPO
 
