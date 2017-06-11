@@ -1,0 +1,34 @@
+{
+    "auth": {
+    },
+    "info": {
+        "title": "Foxborons packages",
+        "titleURL": "http://localhost:8010/",
+        "buildbotURL": "http://localhost:8010/"
+    },
+    "irc": {
+        "server": "irc.velox.pw",
+        "channels": [
+            "#builds"
+        ],
+        "port": 6697,
+        "ssl": true,
+        "nick": "builder"
+    },
+    "repositories": [
+        "foxboron",
+        "foxboron-testing"
+    ],
+    "default_repository": "foxboron",
+    "sources": {
+        "PKGBUILDS": {
+            "repository": "git://github.com/Foxboron/PKGBUILDS.git",
+            "branch": "master"
+        },
+        "AUR": {
+            "repository": "git://github.com/Foxboron/AUR.git",
+            "branch": "master"
+        }
+    },
+    "localworkers": ["bot1", "bot2"]
+}
