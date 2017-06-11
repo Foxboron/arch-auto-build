@@ -1,32 +1,43 @@
 #!/bin/bash
+# I'm so sorry alad :c
+set -e
 
 REPO=$1
 PKG=$2
 
-# Check if there is a repo for this
-add-repo.sh $REPO
+readonly base=/build/build
 
-pacman -Sy
+root=/repos
 
-# lets get the AUR PKGBUILDS
-cower -p */PKGBUILD -dd
-chown -R nobody:nobody *
+chmod 777 "$base/$PKG"
 
-# Check all packages for something inn our repo.
-# If it is there, we dont care for the AUR package
-check(){
-    if [[ $(pacman -Sl "$REPO" | grep "$1" | cut -d" " -f2) == "" || $PKG == $1 ]]; then
-        echo $1
-    fi
+var_tmp=$(mktemp -d "${TMPDIR:-/var/tmp}/$argv0".XXXXXXXX)
+machine=$(uname -m)
+readonly machine
+readonly makepkg_conf=${makepkg_conf-/usr/share/devtools/makepkg-$machine.conf}
+
+
+# libmakepkg/util/util.sh
+_canonicalize_path() {
+    readlink -ev -- "$1"
 }
-aurchain * | while read -r CHAINPKG _; do check $CHAINPKG; done > /tmp/queue
 
-# aurutils will do the building and repo management
-sudo -u nobody aurbuild -c -d $REPO -a /tmp/queue
-EXIT_CODE=$?
+source /usr/share/makepkg/util.sh
 
-# Clean up repo
-rm /repos/$REPO/*~ || true
-rm /repos/$REPO/*.old || true
+sudo arch-nspawn -M "$makepkg_conf" \
+    -C /etc/pacman.orig \
+	/var/lib/build/root pacman -Syu --noconfirm
 
-exit $EXIT_CODE
+cd_safe "$base/$PKG"
+sudo -u build sudo PKGDEST="$var_tmp" makechrootpkg -d $root -r /var/lib/build -cu
+
+root=/repos/$REPO
+
+cd_safe "$var_tmp"
+pkg=(./*)
+mv "$pkg" -t "$root"
+db_path=$(_canonicalize_path "$root/$REPO".db)
+
+
+cd_safe "$root"
+repo-add -R "$db_path" "${pkg#./}"

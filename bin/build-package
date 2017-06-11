@@ -7,7 +7,7 @@ PWD=$(pwd)
 
 docker run --privileged --rm \
     -v /srv/repo:/repos \
-    -v "$PWD"/build/"$PKG":/build/"$PKG" \
+    -v "$PWD"/"$PKG":/build/build/"$PKG" \
     -v /sys/fs/cgroup/systemd/docker:/sys/fs/cgroup/systemd/docker \
     arch-build /usr/bin/build.sh $REPO $PKG
 exit
