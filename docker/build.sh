@@ -21,7 +21,7 @@ _canonicalize_path() {
 source /usr/share/makepkg/util.sh
 
 sudo arch-nspawn -M /etc/makepkg.conf \
-    -C /etc/pacman.conf.orig \
+    -C /etc/pacman.conf \
 	/var/lib/build/root pacman -Syu --noconfirm
 
 cd_safe "$base/$PKG"

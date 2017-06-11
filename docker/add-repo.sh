@@ -1,7 +1,6 @@
 #!/bin/bash
 repolist=(/config/repos/*)
 cp /config/pacman.conf /etc/pacman.conf || true
-cp /config/pacman.conf /etc/pacman.conf.orig || true
 
 for repo in "${repolist[@]}"; do
 	if ! pacconf --repo=${repo#/config/repos} 2> /dev/null; then
