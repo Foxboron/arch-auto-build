@@ -30,5 +30,8 @@
             "branch": "master"
         }
     },
-    "localworkers": ["bot1", "bot2"]
+    "localworkers": ["bot1", "bot2"],
+    "ignore_packages": [
+        "signing-party"
+    ]
 }

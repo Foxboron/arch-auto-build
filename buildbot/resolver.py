@@ -60,7 +60,7 @@ class TriggerWithPackageNames(steps.Trigger, buildstep.ShellMixin):
 
     def add_package(self, package):
         """Adds a pacakge to our build trigger list"""
-        if package in self.repo_config["ignore"]:
+        if package in config["ignore_packages"]:
             return
 
         # Worker for dependenant builds
@@ -87,15 +87,6 @@ class TriggerWithPackageNames(steps.Trigger, buildstep.ShellMixin):
         This triggers all the needed PKGBUILDS and resolves the dependencies"""
         self.sp = []
         self._build_requests = []
-        self.repo_config = {"ignore": []}
-
-        self.observer = logobserver.BufferLogObserver()
-        self.addLogObserver('stdio', self.observer)
-        cmd = yield self.makeRemoteShellCommand(command=['cat', '.buildrc'])
-        yield self.runCommand(cmd)
-        buildrc = self.observer.getStdout()
-        if buildrc:
-            self.repo_config = json.loads(buildrc)
 
         # I simply dont know how to make the yield stuff recursive
         # so we find all .SRCINFOs available and make a list
@@ -128,7 +119,7 @@ class TriggerWithPackageNames(steps.Trigger, buildstep.ShellMixin):
         packages = []
         for i in self.observer.getStdout().split():
             file = i.split("/")[0]
-            if file in available_packages and file not in repo_config["ignore"]:
+            if file in self.dependencies.keys() and file not in config["ignore_packages"]:
                 packages.append(file)
     
         for package in set(packages):
