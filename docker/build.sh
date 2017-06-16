@@ -36,4 +36,10 @@ db_path=$(_canonicalize_path "$root/$REPO".db)
 
 
 cd_safe "$root"
+
+while [ -f $root/$REPO.db.tar.lck ]
+do
+    sleep 2
+done
 repo-add -R "$db_path" "${pkg#./}"
+#repose -zf $REPO
