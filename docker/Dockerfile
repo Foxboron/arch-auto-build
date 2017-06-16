@@ -1,6 +1,6 @@
 FROM archlinux/base
 RUN pacman -Sy
-RUN pacman -S base-devel git devtools vim pacutils --noconfirm
+RUN pacman -S git devtools vim pacutils sudo --noconfirm
 
 RUN mkdir /repos
 RUN chmod 777 /repos
