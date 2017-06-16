@@ -108,16 +108,9 @@ class TriggerWithPackageNames(steps.Trigger, buildstep.ShellMixin):
                 self.add_package(package)
             return self.sp
 
-        # Only build changes PKGBUILDS
-        # And no, i don't know how to remove the output from
-        # self.observer :c
-        self.observer = logobserver.BufferLogObserver()
-        self.addLogObserver('stdio', self.observer)
-        cmd = yield self.makeRemoteShellCommand(command=["git", "diff", "--name-only", "HEAD~1"])
-        yield self.runCommand(cmd)
-
+        changed = self.build.allFiles()
         packages = []
-        for i in self.observer.getStdout().split():
+        for i in changed:
             file = i.split("/")[0]
             if file in self.dependencies.keys() and file not in config["ignore_packages"]:
                 packages.append(file)
