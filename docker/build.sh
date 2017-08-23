@@ -31,15 +31,13 @@ root=/repos/$REPO
 
 cd_safe "$var_tmp"
 pkg=(./*)
-mv "$pkg" -t "$root"
+mv -b "${pkg[@]}" -t "$root"
 db_path=$(_canonicalize_path "$root/$REPO".db)
 
 
 cd_safe "$root"
-
 while [ -f $root/$REPO.db.tar.lck ]
 do
     sleep 2
 done
-repo-add -R "$db_path" "${pkg#./}"
-#repose -zf $REPO
+LANG=C repo-add -R "$db_path" "${pkg[@]}"
